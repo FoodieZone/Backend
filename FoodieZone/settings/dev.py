@@ -1,3 +1,7 @@
+"""
+development 세팅
+"""
+
 from .base import BASE_DIR
 
 # Database
