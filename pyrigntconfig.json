@@ -1,0 +1,11 @@
+{
+  "include": ["FoodieZone"],
+  "exclude": ["media"],
+
+  "reportTypeshedErrors": true,
+  "reportMissingImports": false,
+  "pythonVersion": "3.9",
+  "pythonPlatform": "Darwin",
+
+  "executionEnvironments": [{ "root": "FoodieZone" }]
+}

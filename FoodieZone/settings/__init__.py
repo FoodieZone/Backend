@@ -1,11 +1,11 @@
 from .base import *
 import os
 
-env = os.environ.get('ENV') if os.environ.get('ENV') else 'local'
+env = os.environ.get("ENV") if os.environ.get("ENV") else "local"
 
-if env == 'prod': 
+if env == "prod":
     from .prod import *
-elif env == 'dev':
+elif env == "dev":
     from .dev import *
 else:
     from .local import *
