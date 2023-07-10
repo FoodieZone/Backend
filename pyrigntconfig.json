@@ -1,11 +1,8 @@
 {
-  "include": ["FoodieZone"],
-  "exclude": ["media"],
+  "exclude": ["**/__pycache__", "media"],
 
   "reportTypeshedErrors": true,
   "reportMissingImports": false,
   "pythonVersion": "3.9",
-  "pythonPlatform": "Darwin",
-
-  "executionEnvironments": [{ "root": "FoodieZone" }]
+  "pythonPlatform": "Linux"
 }
