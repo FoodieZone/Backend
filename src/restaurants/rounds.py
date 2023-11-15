@@ -98,8 +98,6 @@ def get_round_info(lng, lat):
     next_x, next_y = 0.0009, 0.45
 
     result = list(get_location("음식점", start_x, start_y, start_x+next_x, start_y+next_y))
-    print("FOOD ROUND SET")
-    print(result)
     if len(result) >= 32: # 16 강
         return match_food_and_image(result[:32])
     elif 16 <= len(result) < 32: # 8 강
