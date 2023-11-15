@@ -39,7 +39,7 @@ def parse_document(response):
             continue
     return food_set
 
-def get_location(keyword, start_x, start_y, end_x, end_y):
+def get_location(keyword, start_x, start_y, end_x, end_y, depth):
     food_round_set = set()
     page_num = 1
 
@@ -53,19 +53,21 @@ def get_location(keyword, start_x, start_y, end_x, end_y):
     response = requests.get(url, params=params, headers=headers, timeout=10).json()
     total_cnt = response['meta']['total_count']
 
+    if depth >= 10:
+        return food_round_set
     if len(food_round_set) >= 32:
         return food_round_set
 
     if total_cnt > 45:
         mid_x, mid_y = (start_x + end_x) / 2, (start_y + end_y) / 2
         # left down
-        food_round_set.update(get_location(keyword, start_x, start_y, mid_x, mid_y))
+        food_round_set.update(get_location(keyword, start_x, start_y, mid_x, mid_y, depth+1))
         # right down
-        food_round_set.update(get_location(keyword, mid_x, start_y, end_x, mid_y))
+        food_round_set.update(get_location(keyword, mid_x, start_y, end_x, mid_y, depth+1))
         # left up
-        food_round_set.update(get_location(keyword, start_x, mid_y, mid_x, mid_y))
+        food_round_set.update(get_location(keyword, start_x, mid_y, mid_x, mid_y, depth+1))
         # right up
-        food_round_set.update(get_location(keyword, mid_x, mid_y, end_x, end_y))
+        food_round_set.update(get_location(keyword, mid_x, mid_y, end_x, end_y, depth+1))
         return food_round_set
     else:
         if response['meta']['is_end']:
@@ -97,7 +99,7 @@ def get_round_info(lng, lat):
     # 경도 100m 는 약 0.0009 (longitude) x
     next_x, next_y = 0.0009, 0.45
 
-    result = list(get_location("음식점", start_x, start_y, start_x+next_x, start_y+next_y))
+    result = list(get_location("음식점", start_x, start_y, start_x+next_x, start_y+next_y, depth=0))
     if len(result) >= 32: # 16 강
         return match_food_and_image(result[:32])
     elif 16 <= len(result) < 32: # 8 강
