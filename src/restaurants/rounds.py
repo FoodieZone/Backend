@@ -2,13 +2,25 @@ import requests
 from .secrets import KAKAO_MAP_REST_API_KEY
 
 
-def check_category_available():
-    available = {'칼국수', '갈비', '일식', '냉면', '술집', '돈까스,우동', '한식', '해물,생선', '베트남음식', '중식', '양식',
-                 '실내포장마차', '초밥,롤', '일본식주점', '국수', '호프,요리주점', '떡볶이', '참치회', '제과,베이커리', '삼겹살',
-                 '와인바', '칵테일바', '양꼬치', '족발,보쌈', '분식', '떡,한과', '육류,고기', '국밥', '이탈리안', '감자탕', '회',
-                 '실내포장마차', '냉면', '닭요리', '중국요리', '피자', '한정식', '찌개,전골', '일식집'}
+def check_category_available(word):
+    available = {'한정식', '술집', '햄버거', '중식', '샐러드', '국수', '떡볶이', '중국요리',
+                 '일식', '삼겹살', '순대', '장어', '피자', '곱창,막창', '갈비', '양식',
+                 '떡,한과', '베트남음식', '닭요리', '칵테일바', '감자탕', '칼국수', '이탈리안',
+                 '족발,보쌈', '초밥,롤', '분식', '양꼬치', '간식', '와인바', '국밥', '참치회',
+                 '한식', '아이스크림', '샤브샤브', '치킨', '호프,요리주점', '일본식라면', '냉면',
+                 '찌개,전골', '일식집', '돈까스,우동', '오리', '육류,고기', '실내포장마차',
+                 '제과,베이커리', '파리바게뜨', '아구', '해물,생선', '회', '일본식주점'}
 
-    bar_similar_words = ['술집']
+    bar_similar_words = {'술집', '호프,요리주점', '실내포장마차', '일본식주점'}
+    bakery_similar_words = {'제과,베이커리', '파리바게뜨'}
+    korean_similar_words = {'한정식', '한식'}
+
+    if word in available:
+        if word in bar_similar_words:
+            word = '요리주점'
+
+        return word
+    return ''
 
 
 def parse_document(response):
@@ -17,10 +29,12 @@ def parse_document(response):
         food_category = list(map(lambda x: x.strip(), document['category_name'].split(">")))
         if len(food_category) >= 3:
             food_name = food_category[2]
-            food_set.add(food_name)
+            if check_category_available(food_name):
+                food_set.add(food_name)
         elif len(food_category) == 2:
             food_name = food_category[1]
-            food_set.add(food_name)
+            if check_category_available(food_name):
+                food_set.add(food_name)
         else:
             continue
     return food_set
