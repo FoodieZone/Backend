@@ -1,4 +1,6 @@
 import requests
+import base64
+import random
 from .secrets import KAKAO_MAP_REST_API_KEY
 
 
@@ -12,13 +14,10 @@ def check_category_available(word):
                  '제과,베이커리', '파리바게뜨', '아구', '해물,생선', '회', '일본식주점'}
 
     bar_similar_words = {'술집', '호프,요리주점', '실내포장마차', '일본식주점'}
-    bakery_similar_words = {'제과,베이커리', '파리바게뜨'}
-    korean_similar_words = {'한정식', '한식'}
 
     if word in available:
         if word in bar_similar_words:
             word = '요리주점'
-
         return word
     return ''
 
@@ -84,16 +83,26 @@ def get_location(keyword, start_x, start_y, end_x, end_y, depth):
 
     return food_round_set
 
+def get_food_image(food_name):
+    food_name = 'image' # dummy data
+    image_path = 'src/restaurants/image.png'
+    try:
+        with open(image_path, 'rb') as image_file:
+            encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+
+            return encoded_image
+    except FileNotFoundError:
+        return ""
+
 def match_food_and_image(food_round):
     result = []
+
     for food in food_round:
-        result.append({'image': 'image.png',
+        result.append({'image': get_food_image(food),
                        'name': food})
     return result
 
 def get_round_info(lng, lat):
-    categories = []
-    food_round_set = set()
     start_x, start_y = float(lng), float(lat)
     # 위도 100m 는 약 0.45 (latitude) y
     # 경도 100m 는 약 0.0009 (longitude) x
@@ -101,9 +110,11 @@ def get_round_info(lng, lat):
 
     result = list(get_location("음식점", start_x, start_y, start_x+next_x, start_y+next_y, depth=0))
     if len(result) >= 32: # 16 강
-        return match_food_and_image(result[:32])
+        sample_result = random.sample(result, 32)
+        return match_food_and_image(sample_result)
     elif 16 <= len(result) < 32: # 8 강
-        return match_food_and_image(result[:16])
+        sample_result = random.sample(result, 16)
+        return match_food_and_image(sample_result)
     else: # 월드컵 불가능 -> 예외처리 : 0 리턴하기
-        return list([])
+        return []
 
