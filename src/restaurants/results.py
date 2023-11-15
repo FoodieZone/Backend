@@ -14,13 +14,18 @@ def get_restaurants_info(lng, lat, name):
         lng = float(document['x'])
         lat = float(document['y'])
         address = document['address_name']
-        name = document['place_name']
-        food_name = document['category_name'].split(">")[-1].strip()
+        place_name = document['place_name']
+        food_category = list(map(lambda x:x.strip(), document['category_name'].split(">")))
+        food_name = food_category[-1].strip()
+
+        if name not in food_category:
+            continue
+
         distance = float(document['distance'])
         restaurant = {"lng":lng,
                       "lat":lat,
                       "address":address,
-                      "name": name,
+                      "name": place_name,
                       "food_name":food_name,
                       "distance":distance}
         restaurants.append(restaurant)
