@@ -3,9 +3,12 @@ from .secrets import KAKAO_MAP_REST_API_KEY
 
 
 def check_category_available():
-    available = {
+    available = {'칼국수', '갈비', '일식', '냉면', '술집', '돈까스,우동', '한식', '해물,생선', '베트남음식', '중식', '양식',
+                 '실내포장마차', '초밥,롤', '일본식주점', '국수', '호프,요리주점', '떡볶이', '참치회', '제과,베이커리', '삼겹살',
+                 '와인바', '칵테일바', '양꼬치', '족발,보쌈', '분식', '떡,한과', '육류,고기', '국밥', '이탈리안', '감자탕', '회',
+                 '실내포장마차', '냉면', '닭요리', '중국요리', '피자', '한정식', '찌개,전골', '일식집'}
 
-    }
+    bar_similar_words = ['술집']
 
 
 def parse_document(response):
@@ -65,6 +68,13 @@ def get_location(keyword, start_x, start_y, end_x, end_y):
 
     return food_round_set
 
+def match_food_and_image(food_round):
+    result = []
+    for food in food_round:
+        result.append({'image': 'image.png',
+                       'name': food})
+    return result
+
 def get_round_info(lng, lat):
     categories = []
     food_round_set = set()
@@ -77,8 +87,9 @@ def get_round_info(lng, lat):
     print("FOOD ROUND SET")
     print(result)
     if len(result) >= 32: # 16 강
-        return result[:32]
+        return match_food_and_image(result[:32])
     elif 16 <= len(result) < 32: # 8 강
-        return result[:16]
+        return match_food_and_image(result[:16])
     else: # 월드컵 불가능 -> 예외처리 : 0 리턴하기
         return list([])
+
