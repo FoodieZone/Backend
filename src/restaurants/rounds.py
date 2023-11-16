@@ -1,8 +1,7 @@
 import requests
-import base64
 import random
 from .secrets import KAKAO_MAP_REST_API_KEY
-from django.http import FileResponse
+
 
 def check_category_available(word):
     available = {'한정식', '술집', '햄버거', '중식', '샐러드', '국수', '떡볶이', '중국요리',
@@ -84,16 +83,26 @@ def get_location(keyword, start_x, start_y, end_x, end_y, depth):
     return food_round_set
 
 def get_food_image(food_name):
-    food_name = 'image' # dummy data
-    image_path = 'restaurants/image.png'
+    # food_name = 'image' # dummy data
+    food_image_dict = {'햄버거': 'image', '피자': 'image', '족발,보쌈': 'image', '오리': 'image',
+                       '칵테일바': 'image', '술집': 'image', '샤브샤브': 'image', '돈까스,우동': 'image',
+                       '감자탕': 'image', '떡,한과': 'image', '양식': 'image', '떡볶이': 'image',
+                       '일본식주점': 'image', '간식': 'image', '아이스크림': 'image', '삼겹살': 'image',
+                       '육류,고기': 'image', '제과,베이커리': 'image', '와인바': 'image', '칼국수': 'image',
+                       '치킨': 'image', '한식': 'image', '한정식': 'image', '참치회': 'image',
+                       '호프,요리주점': 'image', '파리바게뜨': 'image', '분식': 'image', '곱창,막창': 'image',
+                       '국수': 'image', '일식': 'image', '양꼬치': 'image', '샐러드': 'image',
+                       '실내포장마차': 'image', '찌개,전골': 'image', '순대': 'image', '갈비': 'image',
+                       '일식집': 'image', '중국요리': 'image', '장어': 'image', '해물,생선': 'image',
+                       '냉면': 'image', '닭요리': 'image', '중식': 'image', '초밥,롤': 'image',
+                       '아구': 'image', '베트남음식': 'image', '일본식라면': 'image', '국밥': 'image',
+                       '이탈리안': 'image', '회': 'image'}
     try:
-        with open(image_path, 'rb') as image_file:
-            image = FileResponse(image_file)
-            # image = base64.b64encode(image_file.read()).decode('utf-8')
-            return image
-    except Exception as err:
-        print(err)
-        return ""
+        HOSTNAME = requests.build_absolute_url('/')
+    except:
+        HOSTNAME = 'localhost:8000'
+    image_path = HOSTNAME+'/static/'+food_image_dict[food_name]+".png"
+    return image_path
 
 def match_food_and_image(food_round):
     result = []
