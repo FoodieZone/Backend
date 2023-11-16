@@ -2,7 +2,7 @@ import requests
 import base64
 import random
 from .secrets import KAKAO_MAP_REST_API_KEY
-
+from django.http import FileResponse
 
 def check_category_available(word):
     available = {'한정식', '술집', '햄버거', '중식', '샐러드', '국수', '떡볶이', '중국요리',
@@ -85,18 +85,18 @@ def get_location(keyword, start_x, start_y, end_x, end_y, depth):
 
 def get_food_image(food_name):
     food_name = 'image' # dummy data
-    image_path = 'src/restaurants/image.png'
+    image_path = 'restaurants/image.png'
     try:
         with open(image_path, 'rb') as image_file:
-            encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
-
-            return encoded_image
-    except FileNotFoundError:
+            image = FileResponse(image_file)
+            # image = base64.b64encode(image_file.read()).decode('utf-8')
+            return image
+    except Exception as err:
+        print(err)
         return ""
 
 def match_food_and_image(food_round):
     result = []
-
     for food in food_round:
         result.append({'image': get_food_image(food),
                        'name': food})
