@@ -72,11 +72,9 @@ def get_location(start_x, start_y, end_x, end_y, depth):
     if len(food_round_set) >= 32:
         return food_round_set
 
-
     return food_round_set
 
 def get_food_image(food_name):
-    # food_name = 'image' # dummy data
     food_image_dict = {'햄버거': 'image', '피자': 'image', '족발,보쌈': 'image', '오리': 'image',
                        '칵테일바': 'image', '술집': 'image', '샤브샤브': 'image', '돈까스,우동': 'image',
                        '감자탕': 'image', '떡,한과': 'image', '양식': 'image', '떡볶이': 'image',
@@ -90,7 +88,7 @@ def get_food_image(food_name):
                        '냉면': 'image', '닭요리': 'image', '중식': 'image', '초밥,롤': 'image',
                        '아구': 'image', '베트남음식': 'image', '일본식라면': 'image', '국밥': 'image',
                        '이탈리안': 'image', '회': 'image'}
-    hostname = 'localhost:8000'
+    hostname = 'http://localhost:8000'
     image_path = hostname+'/static/'+food_image_dict[food_name]+".png"
     return image_path
 
