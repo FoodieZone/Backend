@@ -1,7 +1,6 @@
-import requests
 import random
+import requests
 from .secrets import KAKAO_MAP_REST_API_KEY
-
 
 def check_category_available(word):
     available = {'한정식', '술집', '햄버거', '중식', '샐러드', '국수', '떡볶이', '중국요리',
@@ -20,7 +19,6 @@ def check_category_available(word):
         return word
     return ''
 
-
 def parse_document(response):
     food_set = set()
     for document in response['documents']:
@@ -37,48 +35,43 @@ def parse_document(response):
             continue
     return food_set
 
-def get_location(keyword, start_x, start_y, end_x, end_y, depth):
+def get_location(start_x, start_y, end_x, end_y, depth):
     food_round_set = set()
     page_num = 1
-
     url = "https://dapi.kakao.com/v2/local/search/keyword.json"
-    params = {'query': keyword,
+    params = {'query': "음식점",
               'page': page_num,
               'rect': f'{start_x},{start_y},{end_x},{end_y}',
               'category_group_code': 'FD6'}
     headers = {"Authorization": "KakaoAK " + KAKAO_MAP_REST_API_KEY}
-
     response = requests.get(url, params=params, headers=headers, timeout=10).json()
     total_cnt = response['meta']['total_count']
-
     if depth >= 10:
         return food_round_set
     if len(food_round_set) >= 32:
         return food_round_set
-
     if total_cnt > 45:
         mid_x, mid_y = (start_x + end_x) / 2, (start_y + end_y) / 2
         # left down
-        food_round_set.update(get_location(keyword, start_x, start_y, mid_x, mid_y, depth+1))
+        food_round_set.update(get_location(start_x, start_y, mid_x, mid_y, depth+1))
         # right down
-        food_round_set.update(get_location(keyword, mid_x, start_y, end_x, mid_y, depth+1))
+        food_round_set.update(get_location(mid_x, start_y, end_x, mid_y, depth+1))
         # left up
-        food_round_set.update(get_location(keyword, start_x, mid_y, mid_x, mid_y, depth+1))
+        food_round_set.update(get_location(start_x, mid_y, mid_x, mid_y, depth+1))
         # right up
-        food_round_set.update(get_location(keyword, mid_x, mid_y, end_x, end_y, depth+1))
+        food_round_set.update(get_location(mid_x, mid_y, end_x, end_y, depth+1))
         return food_round_set
-    else:
-        if response['meta']['is_end']:
-            food_set = parse_document(response)
-            food_round_set.update(food_set)
-            return food_round_set
-        else:
-            page_num += 1
-            food_set = parse_document(response)
-            food_round_set.update(food_set)
+    if response['meta']['is_end']:
+        food_set = parse_document(response)
+        food_round_set.update(food_set)
+        return food_round_set
+    page_num += 1
+    food_set = parse_document(response)
+    food_round_set.update(food_set)
 
-            if len(food_round_set) >= 32:
-                return food_round_set
+    if len(food_round_set) >= 32:
+        return food_round_set
+
 
     return food_round_set
 
@@ -97,11 +90,8 @@ def get_food_image(food_name):
                        '냉면': 'image', '닭요리': 'image', '중식': 'image', '초밥,롤': 'image',
                        '아구': 'image', '베트남음식': 'image', '일본식라면': 'image', '국밥': 'image',
                        '이탈리안': 'image', '회': 'image'}
-    try:
-        HOSTNAME = requests.build_absolute_url('/')
-    except:
-        HOSTNAME = 'localhost:8000'
-    image_path = HOSTNAME+'/static/'+food_image_dict[food_name]+".png"
+    hostname = 'localhost:8000'
+    image_path = hostname+'/static/'+food_image_dict[food_name]+".png"
     return image_path
 
 def match_food_and_image(food_round):
@@ -117,13 +107,11 @@ def get_round_info(lng, lat):
     # 경도 100m 는 약 0.0009 (longitude) x
     next_x, next_y = 0.0009, 0.45
 
-    result = list(get_location("음식점", start_x, start_y, start_x+next_x, start_y+next_y, depth=0))
+    result = list(get_location(start_x, start_y, start_x+next_x, start_y+next_y, depth=0))
     if len(result) >= 32: # 16 강
         sample_result = random.sample(result, 32)
         return match_food_and_image(sample_result)
-    elif 16 <= len(result) < 32: # 8 강
+    if 16 <= len(result) < 32: # 8 강
         sample_result = random.sample(result, 16)
         return match_food_and_image(sample_result)
-    else: # 월드컵 불가능 -> 예외처리 : 0 리턴하기
-        return []
-
+    return []
