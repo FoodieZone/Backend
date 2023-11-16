@@ -25,3 +25,25 @@ You can now run the development server:
 ```
 $ python manage.py runserver
 ```
+
+## Foodie Backend APIs
+
+1. rounds API 
+- get food category and image for 8 or 16 rounds
+- if there's not enough data, the API returns 0
+
+| request | example                                                      |
+|---------|--------------------------------------------------------------|
+ | GET    | localhost:8000/restaurants/rounds/?lng=127.0363&lat=37.5003  |
+
+2.results API
+
+|request| example                                                               |
+|-------|-----------------------------------------------------------------------|
+| GET  | localhost:8000/restaurants/results/?lng=127.0363&lat=37.5003&name=햄버거 |
+
+3. static images API 
+
+|request| example                        |
+|-------|--------------------------------|
+| GET  | localhost:8000/static/image.png |
