@@ -16,7 +16,7 @@ def get_restaurants_info(lng, lat, name):
         address = document['address_name']
         place_name = document['place_name']
         place_url = document['place_url']
-        print(place_url)
+        kakao_maps_id = place_url.split('/')[-1]
         food_category = list(map(lambda x:x.strip(), document['category_name'].split(">")))
 
         if name not in food_category:
@@ -31,6 +31,7 @@ def get_restaurants_info(lng, lat, name):
                       "address":address,
                       "name": place_name,
                       "food_name":food_name,
-                      "distance":distance}
+                      "distance":distance,
+                      "kakao_maps_id":kakao_maps_id}
         restaurants.append(restaurant)
     return restaurants
