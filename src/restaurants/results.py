@@ -15,6 +15,8 @@ def get_restaurants_info(lng, lat, name):
         lat = float(document['y'])
         address = document['address_name']
         place_name = document['place_name']
+        place_url = document['place_url']
+        print(place_url)
         food_category = list(map(lambda x:x.strip(), document['category_name'].split(">")))
 
         if name not in food_category:
