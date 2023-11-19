@@ -30,7 +30,7 @@ $ python manage.py runserver
 
 1. rounds API 
 - get food category and image for 8 or 16 rounds
-- if there's not enough data, the API returns 0
+- if there's no enough data, the API returns 0
 
 | request | example                                                      |
 |---------|--------------------------------------------------------------|

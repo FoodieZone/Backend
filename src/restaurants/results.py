@@ -21,7 +21,10 @@ def get_restaurants_info(lng, lat, name):
 
         if name not in food_category:
             continue
-
+        if len(food_category) >= 3:
+            food_name = food_category[2]
+        else:
+            food_name = food_category[-1]
         distance = float(document['distance'])
         restaurant = {"lng":lng,
                       "lat":lat,
