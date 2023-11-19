@@ -18,7 +18,7 @@ def get_restaurants_info(lng, lat, name):
         place_url = document['place_url']
         kakao_maps_id = place_url.split('/')[-1]
         food_category = list(map(lambda x:x.strip(), document['category_name'].split(">")))
-
+        image = "http://127.0.0.1:8000/static/image.png"
         if name not in food_category:
             continue
         if len(food_category) >= 3:
@@ -28,6 +28,7 @@ def get_restaurants_info(lng, lat, name):
         distance = float(document['distance'])
         restaurant = {"lng":lng,
                       "lat":lat,
+                      "image":image,
                       "address":address,
                       "name": place_name,
                       "food_name":food_name,
