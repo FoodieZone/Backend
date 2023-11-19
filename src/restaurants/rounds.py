@@ -88,7 +88,7 @@ def get_food_image(food_name):
                        '냉면': 'image', '닭요리': 'image', '중식': 'image', '초밥,롤': 'image',
                        '아구': 'image', '베트남음식': 'image', '일본식라면': 'image', '국밥': 'image',
                        '이탈리안': 'image', '회': 'image'}
-    hostname = 'http://localhost:8000'
+    hostname = 'http://127.0.0.1:8000'
     image_path = hostname+'/static/'+food_image_dict[food_name]+".png"
     return image_path
 
