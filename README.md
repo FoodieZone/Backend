@@ -34,16 +34,16 @@ $ python manage.py runserver
 
 | request | example                                                      |
 |---------|--------------------------------------------------------------|
- | GET    | localhost:8000/restaurants/rounds/?lng=127.0363&lat=37.5003  |
+ | GET    | http://{SERVER_IP}:8000/restaurants/rounds/?lng=127.0363&lat=37.5003  |
 
 2.results API
 
 |request| example                                                               |
 |-------|-----------------------------------------------------------------------|
-| GET  | localhost:8000/restaurants/results/?lng=127.0363&lat=37.5003&name=햄버거 |
+| GET  | http://{SERVER_IP}:8000/restaurants/results/?lng=127.0363&lat=37.5003&name=햄버거 |
 
 3. static images API 
 
 |request| example                        |
 |-------|--------------------------------|
-| GET  | localhost:8000/static/image.png |
+| GET  | http://{SERVER_IP}:8000/static/image.png |
