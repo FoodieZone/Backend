@@ -2,18 +2,19 @@ import random
 import requests
 from .secrets import KAKAO_MAP_REST_API_KEY
 
+categories = {'한정식', '술집', '햄버거', '중식', '샐러드', '국수', '떡볶이', '중국요리',
+            '일식', '삼겹살', '순대', '장어', '피자', '곱창,막창', '갈비', '양식',
+            '떡,한과', '베트남음식', '닭요리', '칵테일바', '감자탕', '칼국수', '이탈리안',
+            '족발,보쌈', '초밥,롤', '분식', '양꼬치', '간식', '와인바', '국밥', '참치회',
+            '한식', '아이스크림', '샤브샤브', '치킨', '호프,요리주점', '일본식라면', '냉면',
+            '찌개,전골', '일식집', '돈까스,우동', '오리', '육류,고기', '실내포장마차',
+            '제과,베이커리', '파리바게뜨', '아구', '해물,생선', '회', '일본식주점'}
+
 def check_category_available(word):
-    available = {'한정식', '술집', '햄버거', '중식', '샐러드', '국수', '떡볶이', '중국요리',
-                 '일식', '삼겹살', '순대', '장어', '피자', '곱창,막창', '갈비', '양식',
-                 '떡,한과', '베트남음식', '닭요리', '칵테일바', '감자탕', '칼국수', '이탈리안',
-                 '족발,보쌈', '초밥,롤', '분식', '양꼬치', '간식', '와인바', '국밥', '참치회',
-                 '한식', '아이스크림', '샤브샤브', '치킨', '호프,요리주점', '일본식라면', '냉면',
-                 '찌개,전골', '일식집', '돈까스,우동', '오리', '육류,고기', '실내포장마차',
-                 '제과,베이커리', '파리바게뜨', '아구', '해물,생선', '회', '일본식주점'}
 
     bar_similar_words = {'술집', '호프,요리주점', '실내포장마차', '일본식주점'}
 
-    if word in available:
+    if word in categories:
         if word in bar_similar_words:
             word = '요리주점'
         return word
@@ -100,16 +101,36 @@ def match_food_and_image(food_round):
     return result
 
 def get_round_info(lng, lat):
-    start_x, start_y = float(lng), float(lat)
-    # 위도 100m 는 약 0.45 (latitude) y
-    # 경도 100m 는 약 0.0009 (longitude) x
-    next_x, next_y = 0.0009, 0.45
+    self_category_flag = False
+    try:
+        start_x, start_y = float(lng), float(lat)
+        if 125 < start_x and start_x < 132 and 33 < start_y and start_y < 39: # 대한민국의 위경도 범위
+            # 위도 100m 는 약 0.45 (latitude) y
+            # 경도 100m 는 약 0.0009 (longitude) x
+            next_x, next_y = 0.0009, 0.45
 
-    result = list(get_location(start_x, start_y, start_x+next_x, start_y+next_y, depth=0))
-    if len(result) >= 32: # 16 강
-        sample_result = random.sample(result, 32)
-        return match_food_and_image(sample_result)
-    if 16 <= len(result) < 32: # 8 강
-        sample_result = random.sample(result, 16)
-        return match_food_and_image(sample_result)
-    return []
+            result = list(get_location(start_x, start_y, start_x+next_x, start_y+next_y, depth=0))
+            if len(result) >= 32: # 16 강
+                sample_result = random.sample(result, 32)
+                return self_category_flag, match_food_and_image(sample_result)
+            if 16 <= len(result) < 32: # 8 강
+                sample_result = random.sample(result, 16)
+                return self_category_flag, match_food_and_image(sample_result)
+            self_category_flag = True
+        else:
+            self_category_flag = True
+    except:
+        self_category_flag = True
+    
+    if self_category_flag:
+        return self_category_flag, match_food_and_image(get_self_round())
+
+def get_self_round():
+    food_set = set() 
+    bar_similar_words = {'술집', '호프,요리주점', '실내포장마차', '일본식주점'}
+    
+    while len(food_set) != 16:
+        food_set = food_set | set(random.sample(categories, 16 - len(food_set)))
+        food_set -= bar_similar_words
+        
+    return food_set
