@@ -33,3 +33,4 @@ virtualenv==20.23.1
 wheel==0.38.4
 wrapt==1.15.0
 requests==2.31.0
+django-cors-headers==4.3.1
