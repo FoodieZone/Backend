@@ -21,9 +21,9 @@ def rounds(request):
     context = {}
     lng = request.GET.get('lng')  # 경도 x float
     lat = request.GET.get('lat')  # 위도 y float
-    is_self, food_round = get_round_info(lng=lng, lat=lat)
+    is_self_category, food_round = get_round_info(lng=lng, lat=lat)
     context['round'] = len(food_round) # 8 or 16 (16, 32)
-    context['is_self'] = is_self
+    context['is_self_category'] = is_self_category
     context['foods'] = food_round
     context = json.dumps(context, cls=DjangoJSONEncoder, ensure_ascii=False)
     return HttpResponse(context)
