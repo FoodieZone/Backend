@@ -30,7 +30,7 @@ def get_restaurants_info(lng, lat, name):
         restaurant = {"lng":lng,
                       "lat":lat,
                       "image":image,
-                      "icon":image,
+                      "icon":icon,
                       "address":address,
                       "name": place_name,
                       "food_name":food_name,
