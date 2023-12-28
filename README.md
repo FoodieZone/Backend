@@ -5,6 +5,7 @@
 ```
 $ docker run -d -p 8080:8080 freemjstudio/foodie-django
 ```
+  
 
 ### 2. Deploy with git repository
 
