@@ -1,4 +1,13 @@
 ## Getting Started
+
+### 1. Deploy with Docker Image
+
+'''
+$ docker run -d -p 8080:8080 freemjstudio/foodie-django
+'''
+
+### 2. Deploy with git repository
+
 First clone the repository from Github and switch to the new directory:
 
 ```
