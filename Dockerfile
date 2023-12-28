@@ -1,5 +1,5 @@
 FROM python:3.9.16
-LABEL maintainer="Minjee Woo <mjwoo001@gmail.com>"
+LABEL maintainer="freemjstudio <mjwoo001@gmail.com>"
 RUN apt-get -y update
 RUN apt-get -y install vim 
 
