@@ -37,7 +37,9 @@ You can now run the development server:
 $ python manage.py runserver
 ```
 
-## :: Foodie Backend APIs 🔨
+
+       
+## :: Foodie Backend APIs 💻
 
 1. rounds API 
 - get food category and image for 8 or 16 rounds
