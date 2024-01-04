@@ -6,7 +6,7 @@
 $ docker run -d -p 8080:8080 freemjstudio/foodie-django
 ```
 
-- https://hub.docker.com/repository/docker/freemjstudio/foodie-django/general
+- [Docker Hub](https://hub.docker.com/r/freemjstudio/foodie-django)
 
 ### 2. Deploy with Git Repository 🐱
 
